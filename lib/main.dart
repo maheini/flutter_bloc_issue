@@ -35,7 +35,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final DemoCubit demo = DemoCubit();
+  final DemoCubit cubit = DemoCubit();
   List<String> items = ['Hello', 'Peter', 'Number', 'Foo'];
 
   @override
@@ -44,13 +44,12 @@ class _MyAppState extends State<MyApp> {
       appBar: AppBar(
           title: ElevatedButton(
         child: Text('change cubit'),
-        onPressed: () => demo.change(demo.state + 1),
+        onPressed: () => cubit.change(cubit.state + 1),
       )),
       body: ListView.builder(
         itemCount: items.length,
         itemBuilder: (context, index) {
           return BlocBuilder<DemoCubit, int>(
-              bloc: demo,
               buildWhen: (previous, current) {
                 if (index == 0) {
                   return true;
@@ -58,8 +57,9 @@ class _MyAppState extends State<MyApp> {
                   return false;
                 }
               },
+              bloc: cubit,
               builder: (context, state) {
-                print('$state ---  ${demo.state}');
+                print('builder_state: $state --- bloc_state: ${cubit.state}');
                 return ListTile(
                   title: Text(items[index]),
                 );
