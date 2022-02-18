@@ -7,6 +7,7 @@ class DemoCubit extends Cubit<int> {
 
   void change(input) {
     state = input;
-    emit(input);
+    print('new_state: $state');
+    emit(state);
   }
 }

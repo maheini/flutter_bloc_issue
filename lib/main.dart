@@ -13,6 +13,7 @@ class Test extends StatefulWidget {
   _TestState createState() => _TestState();
 }
 
+// this widget has the purpose to trigger a rebuild of "MyApp"
 class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
@@ -36,36 +37,21 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final DemoCubit cubit = DemoCubit();
-  List<String> items = ['Hello', 'Peter', 'Number', 'Foo'];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: ElevatedButton(
-        child: Text('change cubit'),
-        onPressed: () => cubit.change(cubit.state + 1),
-      )),
-      body: ListView.builder(
-        itemCount: items.length,
-        itemBuilder: (context, index) {
-          return BlocBuilder<DemoCubit, int>(
-              buildWhen: (previous, current) {
-                if (index == 0) {
-                  return true;
-                } else {
-                  return false;
-                }
-              },
-              bloc: cubit,
-              builder: (context, state) {
-                print('builder_state: $state --- bloc_state: ${cubit.state}');
-                return ListTile(
-                  title: Text(items[index]),
-                );
-              });
-        },
-      ),
+    return BlocBuilder<DemoCubit, int>(
+      buildWhen: (previous, current) {
+        return false;
+      },
+      bloc: cubit,
+      builder: (context, state) {
+        print('builder_state: $state -- cubit_state: ${cubit.state}');
+        return ElevatedButton(
+          onPressed: () => cubit.change(1),
+          child: const Text('Change state'),
+        );
+      },
     );
   }
 }
